@@ -115,7 +115,6 @@ spec:
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           privileged: false
-          runAsNonRoot: false
           runAsNonRoot: true
           runAsUser: 9999
         volumeMounts:
