@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  font-size: 14px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  white-space: nowrap;
+}
+
+th {
+    background-color: #b8b7b1;
+    font-size: 16px;
+    font-weight: bold;
+ }
+
+tr:nth-child(even) {
+  background-color: #9ec9e0;
+}
+</style>
+</head>
+<p>Container details for cluster - {{ cluster }}. Date extracted on POD - {{ podname }}</p>
+<hr>
+<table>
+    <thead>
+        <tr>
+            <td>Namespace</td>
+            <td>POD</td>
+            <td>Host IP</td>
+            <td>POD IP</td>
+            <td>Status</td>
+            <td>Container Name</td>
+            <td>Image</td>
+            <td>Image ID</td>
+            <td>Status</td>
+        </tr>
+    </thead>
+    <tbody>
+{% for key, values in result.items() %}
+{% for item in values %}
+    <tr>
+        <td>{{ item.pod_namespace }}</td>
+        <td>{{ item.pod_name }}</td>
+        <td>{{ item.pod_host_ip }}</td>
+        <td>{{ item.pod_ip }}</td>
+        <td>{{ item.pod_status }}</td>
+        <td>{{ item.container_name }}</td>
+        <td>{{ item.container_image }}</td>
+        <td>{{ item.container_image_id }}</td>
+        <td>{{ item.container_status }}</td>
+    </tr>
+{% endfor %}
+{% endfor %}
+    </tbody>
+</table>
