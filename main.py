@@ -9,12 +9,10 @@ def containers():
     outputjson = {}
     outputjson['items'] = []
     
-    ##### Uncomment if running outside of the K8s cluster
     if not os.environ.get('INCLUSTER_CONFIG'):
         config.load_kube_config()
         mypodname = os.uname()[1]
     else:  
-    ##### Uncomment if running inside of the K8s cluster
         config.load_incluster_config()
         mypodname = os.environ['HOSTNAME']
     
@@ -58,12 +56,10 @@ def containers_grid():
     outputjson = {}
     outputjson['items'] = []
 
-    ##### Uncomment if running outside of the K8s cluster
     if not os.environ.get('INCLUSTER_CONFIG'):
         config.load_kube_config()
         mypodname = os.uname()[1]
     else:  
-    ##### Uncomment if running inside of the K8s cluster
         config.load_incluster_config()
         mypodname = os.environ['HOSTNAME']
     
