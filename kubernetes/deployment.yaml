@@ -96,9 +96,11 @@ spec:
     spec:
       containers:
       - env:
+        - name: INCLUSTER_CONFIG
+          value: "1"
         - name: CLUSTER_NAME
-          value: clustername.demo.local
-        image: whoami6443/k8soper:0.3.3
+          value: "clustername.demo.local"
+        image: whoami6443/k8soper:0.3.0
         imagePullPolicy: Always
         name: k8s-operations
         ports:

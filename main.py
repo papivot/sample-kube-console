@@ -8,18 +8,23 @@ app = Flask(__name__)
 def containers():
     outputjson = {}
     outputjson['items'] = []
-    clustername = os.environ['CLUSTER_NAME']
-    mypodname = os.environ['HOSTNAME']
-    #clustername = "newcluster"
-    #mypodname = "newpod"
-
-    ##### Uncomment if running outside of the K8s cluster
-    #config.load_kube_config()
     
+    ##### Uncomment if running outside of the K8s cluster
+    if not os.environ.get('INCLUSTER_CONFIG'):
+        config.load_kube_config()
+        mypodname = os.uname()[1]
+    else:  
     ##### Uncomment if running inside of the K8s cluster
-    config.load_incluster_config()
+        config.load_incluster_config()
+        mypodname = os.environ['HOSTNAME']
     
     v1 = client.CoreV1Api()
+
+    if not os.environ.get('CLUSTER_NAME'):
+        clustername = v1.api_client.configuration.host
+    else:  
+        clustername = os.environ['CLUSTER_NAME']
+        
     ret = v1.list_pod_for_all_namespaces(watch=False)
     for pod in ret.items:
         namespace = pod.metadata.namespace
@@ -52,18 +57,23 @@ def containers():
 def containers_grid():
     outputjson = {}
     outputjson['items'] = []
-    clustername = os.environ['CLUSTER_NAME']
-    mypodname = os.environ['HOSTNAME']
-    #clustername = "newcluster"
-    #mypodname = "newpod"
 
     ##### Uncomment if running outside of the K8s cluster
-    #config.load_kube_config()
-    
+    if not os.environ.get('INCLUSTER_CONFIG'):
+        config.load_kube_config()
+        mypodname = os.uname()[1]
+    else:  
     ##### Uncomment if running inside of the K8s cluster
-    config.load_incluster_config()
+        config.load_incluster_config()
+        mypodname = os.environ['HOSTNAME']
     
     v1 = client.CoreV1Api()
+
+    if not os.environ.get('CLUSTER_NAME'):
+        clustername = v1.api_client.configuration.host
+    else:  
+        clustername = os.environ['CLUSTER_NAME']
+    
     ret = v1.list_pod_for_all_namespaces(watch=False)
     for pod in ret.items:
         namespace = pod.metadata.namespace
