@@ -53,8 +53,6 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    prometheus.io/scrape: 'true'
   labels:
     app: k8s-operations
     name: k8s-operations
@@ -164,6 +162,9 @@ spec:
   gateways:
   - k8s-operations-gateway
   http:
+  - match:
+    - uri:
+        exact: /k8soper
   - route:
     - destination:
         host: k8s-operations
