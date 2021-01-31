@@ -1,27 +1,28 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: kube-ops
+  name: k8s-operations
   labels:
-    project.name: k8s-operations
-    project.app: k8s-operations
+    istio-injection: enabled
+    name: k8s-operations
+    app: k8s-operations
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: k8s-operations
-  namespace: kube-ops
+  namespace: k8s-operations
   labels:
-    project.name: k8s-operations
-    project.app: k8s-operations
+    name: k8s-operations
+    app: k8s-operations
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: k8s-operations
   labels:
-    project.app: k8s-operations
-    project.name: k8s-operations
+    app: k8s-operations
+    name: k8s-operations
 rules:
   - apiGroups:
     - '*'
@@ -37,8 +38,8 @@ kind: ClusterRoleBinding
 metadata:
   name: k8s-operations
   labels:
-    project.app: k8s-operations
-    project.name: k8s-operations
+    app: k8s-operations
+    name: k8s-operations
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -46,7 +47,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: k8s-operations
-  namespace: kube-ops
+  namespace: k8s-operations
 ---
 apiVersion: v1
 kind: Service
@@ -54,35 +55,35 @@ metadata:
   annotations:
     prometheus.io/scrape: 'true'
   labels:
-    project.app: k8s-operations
-    project.name: k8s-operations
+    app: k8s-operations
+    name: k8s-operations
   name: k8s-operations
-  namespace: kube-ops
+  namespace: k8s-operations
 spec:
   ports:
     - name: http
       port: 80
-      protocol: TCP
       targetPort: 5000
   selector:
-    project.app: k8s-operations
+    app: k8s-operations
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    project.name: k8s-operations
-    project.app: k8s-operations
+    name: k8s-operations
+    app: k8s-operations
   name: k8s-operations
-  namespace: kube-ops
+  namespace: k8s-operations
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      project.app: k8s-operations
+      app: k8s-operations
+      version: v1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -90,9 +91,9 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        project.app: k8s-operations
+        app: k8s-operations
+        version: v1
     spec:
       containers:
       - env:
