@@ -3,6 +3,8 @@ kind: Namespace
 metadata:
   name: k8s-operations
   labels:
+    #enable istio-injection for enabling istio-injection
+    istio-injection: enabled
     name: k8s-operations
     app: k8s-operations
 ---
@@ -65,7 +67,6 @@ spec:
       targetPort: 5000
   selector:
     app: k8s-operations
-  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -135,3 +136,36 @@ spec:
       serviceAccount: k8s-operations
       serviceAccountName: k8s-operations
       terminationGracePeriodSeconds: 30
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: k8s-operations-gateway
+  namespace: k8s-operations
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: k8s-operations-virtualservice
+  namespace: k8s-operations
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - k8s-operations-gateway
+  http:
+  - route:
+    - destination:
+        host: k8s-operations
+        port:
+          number: 80
