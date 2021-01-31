@@ -162,10 +162,7 @@ spec:
   gateways:
   - k8s-operations-gateway
   http:
-  - match:
-    - uri:
-        prefix: /k8soper
-    route:
+  - route:
     - destination:
         # Route to service
         host: k8s-operations
