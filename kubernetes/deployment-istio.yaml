@@ -11,7 +11,7 @@ metadata:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: k8s-operations
+  name: k8s-operations-sa
   namespace: k8s-operations
   labels:
     name: k8s-operations
@@ -20,7 +20,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: k8s-operations
+  name: k8s-operations-cr
   labels:
     app: k8s-operations
     name: k8s-operations
@@ -37,17 +37,17 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: k8s-operations
+  name: k8s-operations-crb
   labels:
     app: k8s-operations
     name: k8s-operations
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: k8s-operations
+  name: k8s-operations-cr
 subjects:
 - kind: ServiceAccount
-  name: k8s-operations
+  name: k8s-operations-sa
   namespace: k8s-operations
 ---
 apiVersion: v1
@@ -56,7 +56,7 @@ metadata:
   labels:
     app: k8s-operations
     name: k8s-operations
-  name: k8s-operations
+  name: k8s-operations-svc
   namespace: k8s-operations
 spec:
   ports:
@@ -64,7 +64,7 @@ spec:
       port: 80
       targetPort: 5000
   selector:
-    app: k8s-operations
+    app: k8s-operations-deployment
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -72,7 +72,7 @@ metadata:
   labels:
     name: k8s-operations
     app: k8s-operations
-  name: k8s-operations
+  name: k8s-operations-deployment
   namespace: k8s-operations
 spec:
   progressDeadlineSeconds: 600
@@ -80,7 +80,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: k8s-operations
+      app: k8s-operations-pods
       version: v1
   strategy:
     rollingUpdate:
@@ -90,7 +90,7 @@ spec:
   template:
     metadata:
       labels:
-        app: k8s-operations
+        app: k8s-operations-pods
         version: v1
     spec:
       containers:
@@ -131,8 +131,8 @@ spec:
       dnsPolicy: ClusterFirst
       schedulerName: default-scheduler
       securityContext: {}
-      serviceAccount: k8s-operations
-      serviceAccountName: k8s-operations
+      serviceAccount: k8s-operations-sa
+      serviceAccountName: k8s-operations-sa
       terminationGracePeriodSeconds: 30
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -165,6 +165,6 @@ spec:
   - route:
     - destination:
         # Route to service
-        host: k8s-operations
+        host: k8s-operations-svc
         port:
           number: 80
