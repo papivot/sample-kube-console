@@ -64,7 +64,7 @@ spec:
       port: 80
       targetPort: 5000
   selector:
-    app: k8s-operations-deployment
+    app: k8s-operations
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,7 +80,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: k8s-operations-pods
+      app: k8s-operations
       version: v1
   strategy:
     rollingUpdate:
@@ -90,7 +90,7 @@ spec:
   template:
     metadata:
       labels:
-        app: k8s-operations-pods
+        app: k8s-operations
         version: v1
     spec:
       containers:
