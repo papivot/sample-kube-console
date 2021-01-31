@@ -164,7 +164,7 @@ spec:
   http:
   - match:
     - uri:
-        exact: /k8soper
+        prefix: /k8soper
     route:
     - destination:
         # Route to service
