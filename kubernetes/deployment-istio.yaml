@@ -165,8 +165,9 @@ spec:
   - match:
     - uri:
         exact: /k8soper
-  - route:
+    route:
     - destination:
+        # Route to service
         host: k8s-operations
         port:
           number: 80
