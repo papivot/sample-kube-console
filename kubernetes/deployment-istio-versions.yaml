@@ -229,7 +229,7 @@ metadata:
   namespace: k8s-operations
 spec:
   hosts:
-  - k8s-operations-svc
+  - "*"
   gateways:
   - k8s-operations-gateway
   http:
