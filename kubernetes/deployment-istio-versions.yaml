@@ -229,22 +229,14 @@ metadata:
   namespace: k8s-operations
 spec:
   hosts:
-  - "*"
+  - k8s-operations
   gateways:
   - k8s-operations-gateway
   http:
   - route:
-    - weight: 70
-      destination:
+    - destination:
         # Route to service
         host: k8s-operations-svc
         subset: v1
-        port:
-          number: 80
-    - weight: 30
-      destination:
-        # Route to service
-        host: k8s-operations-svc
-        subset: v2
         port:
           number: 80
