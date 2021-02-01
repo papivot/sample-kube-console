@@ -240,12 +240,12 @@ spec:
         subset: v1
         port:
           number: 80
-        weight: 70  
+      weight: 70  
     - destination:
         # Route to service
         host: k8s-operations-svc
         subset: v2
         port:
           number: 80
-        weight: 30  
+      weight: 30  
       
