@@ -166,7 +166,7 @@ spec:
     - uri:
         prefix: /
     - uri:
-        prefix: /getpods
+        prefix: /getpod
     route:
     - destination:
         # Route to service
